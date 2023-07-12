@@ -13,7 +13,8 @@ with open("faiss_store.pkl", "rb") as f:
     store = pickle.load(f)
 
 store.index = index
-chain = VectorDBQAWithSourcesChain.from_llm(llm=OpenAI(temperature=0), vectorstore=store)
+llm = ChatOpenAI(model_name="gpt-4", temperature=0, max_tokens=1000)
+chain = VectorDBQAWithSourcesChain.from_llm(llm=llm, vectorstore=store)
 
 
 # From here down is all the StreamLit UI.
