@@ -6,6 +6,7 @@ from langchain import OpenAI
 from langchain.chains import VectorDBQAWithSourcesChain
 import pickle
 from langchain.chat_models import ChatOpenAI
+from langchain.chains import RetrievalQAWithSourcesChain
 
 # Load the LangChain.
 index = faiss.read_index("docs.index")
@@ -15,7 +16,8 @@ with open("faiss_store.pkl", "rb") as f:
 
 store.index = index
 llm = ChatOpenAI(model_name="gpt-4", temperature=0, max_tokens=1000)
-chain = VectorDBQAWithSourcesChain.from_llm(llm=llm, vectorstore=store)
+# chain = VectorDBQAWithSourcesChain.from_llm(llm=llm, vectorstore=store)
+chain = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, retriever=store.as_retriever())
 
 
 # From here down is all the StreamLit UI.
